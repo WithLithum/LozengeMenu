@@ -11,13 +11,14 @@ public class MiscMenu : ISubMenu
 {
     private readonly NativeMenu _menu = new("Lozenge", "Misc Options");
     private readonly NativeCheckboxItem _blackOut = new("Blackout Mode");
-    private readonly NativeCheckboxItem _blackOutVehicles = new("Blackout Vehicles");
+    private readonly NativeCheckboxItem _blackOutVehicles = new("Blackout Vehicles", true);
     private readonly NativeCheckboxItem _riotMode = new("Riot Mode");
 
     public NativeMenu Create()
     {
         _blackOut.CheckboxChanged += BlackoutChanged;
         _blackOutVehicles.CheckboxChanged += BlackoutVehiclesChanged;
+        _blackOutVehicles.Enabled = false;
         _riotMode.CheckboxChanged += RiotChanged;
 
         _menu.Add(_blackOut);
