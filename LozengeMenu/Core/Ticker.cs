@@ -15,8 +15,13 @@ public class Ticker : Script
 
     public static bool NeverWanted { get; set; }
     public static int MaxWantedLevel { get; set; }
+    public static bool LockMaxWantedLevel { get; set; }
+    public static int WantedLevel { get; set; }
+    public static bool LockWantedLevel { get; set; }
 
-    private static int LastPlayer { get; set; } 
+    private static int LastPlayer { get; set; }
+
+    public static event EventHandler WantedLevelUpdate;
 
     public static void UpdateInvincible(bool enable)
     {
@@ -39,11 +44,32 @@ public class Ticker : Script
 
         if (!NeverWanted)
         {
-            Util.CheckLockMaxWantedLevel(MaxWantedLevel);
+            if (LockMaxWantedLevel)
+            {
+                Util.CheckLockMaxWantedLevel(MaxWantedLevel);
+            }
+            else
+            {
+                MaxWantedLevel = Game.MaxWantedLevel;
+            }
+
+            if (!LockWantedLevel)
+            {
+                if (WantedLevel != Game.Player.WantedLevel)
+                {
+                    WantedLevel = Game.Player.WantedLevel;
+                    WantedLevelUpdate?.Invoke(null, EventArgs.Empty);
+                }
+            }
+            else
+            {
+                Game.Player.WantedLevel = WantedLevel;
+            }
         }
         else
         {
             Util.CheckLockMaxWantedLevel(0);
+            Game.Player.WantedLevel = 0;
         }
     }
     #endregion
@@ -54,6 +80,9 @@ public class Ticker : Script
 
     public Ticker()
     {
+        WantedLevel = Game.Player.WantedLevel;
+        MaxWantedLevel = Game.MaxWantedLevel;
+
         Tick += Ticker_Tick;
     }
 
