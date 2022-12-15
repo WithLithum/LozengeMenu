@@ -12,12 +12,18 @@ using System.Threading.Tasks;
 internal class PlayerMenu : ISubMenu
 {
     private readonly NativeMenu _menu = new("Lozenge", "Player Options");
-    private readonly NativeCheckboxItem _invincible = new("Invinciblity");
-    private readonly NativeCheckboxItem _neverWanted = new("Never Wanted", "This option overrides all maximum wanted level and wanted level lock options.");
-    private readonly NativeListItem<int> _wantedLevel = new("Wanted Level", "This option may ignore maximum wanted level.", 0, 1, 2, 3, 4, 5);
-    private readonly NativeCheckboxItem _lockWantedLevel = new("Lock Wanted Level");
-    private readonly NativeListItem<int> _maxWantedLevel = new("Max Wanted Level", 0, 1, 2, 3, 4, 5);
-    private readonly NativeCheckboxItem _lockMaxWantedLevel = new("Lock Max Wanted Level");
+    private readonly NativeCheckboxItem _invincible = new("~g~Invinciblity");
+    private readonly NativeCheckboxItem _neverWanted = new("~y~Never Wanted", "This option overrides all maximum wanted level and wanted level lock options.");
+    private readonly NativeListItem<int> _wantedLevel = new("~y~Wanted Level", "This option may ignore maximum wanted level.", 0, 1, 2, 3, 4, 5);
+    private readonly NativeCheckboxItem _lockWantedLevel = new("~y~Lock Wanted Level");
+    private readonly NativeListItem<int> _maxWantedLevel = new("~y~Max Wanted Level", 0, 1, 2, 3, 4, 5);
+    private readonly NativeCheckboxItem _lockMaxWantedLevel = new("~y~Lock Max Wanted Level");
+    private readonly NativeCheckboxItem _dispatchCops = new("~r~Dispatch Cops");
+    private readonly NativeCheckboxItem _policeIgnore = new("~r~Ignored by Cops");
+    private readonly NativeCheckboxItem _pedsIgnore = new("~r~Ignored by Everyone");
+    private readonly NativeItem _replenishPlayer = new("~g~Replenish Player");
+    private readonly NativeItem _healPlayer = new("~b~Replenish Health");
+    private readonly NativeItem _addArmour = new("~b~Replenish Armour");
 
     public NativeMenu Create()
     {
@@ -32,6 +38,12 @@ internal class PlayerMenu : ISubMenu
         _wantedLevel.ItemChanged += WantedLevelChanged;
         _lockMaxWantedLevel.CheckboxChanged += _lockMaxWantedLevel_CheckboxChanged;
         _lockWantedLevel.CheckboxChanged += LockWantedLevelChanged;
+        _addArmour.Activated += AddArmourActivated;
+        _healPlayer.Activated += HealActivated;
+        _replenishPlayer.Activated += ReplenishPlayer;
+        _dispatchCops.CheckboxChanged += DispatchCopsChanged;
+        _policeIgnore.CheckboxChanged += PoliceIgnoreChanged;
+        _pedsIgnore.CheckboxChanged += PedsIgnoreChanged;
 
         _menu.Add(_invincible);
         _menu.Add(_neverWanted);
@@ -39,10 +51,47 @@ internal class PlayerMenu : ISubMenu
         _menu.Add(_lockWantedLevel);
         _menu.Add(_maxWantedLevel);
         _menu.Add(_lockMaxWantedLevel);
+        _menu.Add(_dispatchCops);
+        _menu.Add(_policeIgnore);
+        _menu.Add(_pedsIgnore);
+        _menu.Add(_replenishPlayer);
+        _menu.Add(_healPlayer);
+        _menu.Add(_addArmour);
 
         _menu.Shown += MenuShown;
 
         return _menu;
+    }
+
+    private void PedsIgnoreChanged(object sender, EventArgs e)
+    {
+        Game.Player.IgnoredByEveryone = _pedsIgnore.Checked;
+    }
+
+    private void PoliceIgnoreChanged(object sender, EventArgs e)
+    {
+        Game.Player.IgnoredByPolice = _policeIgnore.Checked;
+    }
+
+    private void DispatchCopsChanged(object sender, EventArgs e)
+    {
+        Game.Player.DispatchsCops = _dispatchCops.Checked;
+    }
+
+    private void ReplenishPlayer(object sender, EventArgs e)
+    {
+        HealActivated(sender, e);
+        AddArmourActivated(sender, e);
+    }
+
+    private void HealActivated(object sender, EventArgs e)
+    {
+        Game.Player.Character.Health = Game.Player.Character.MaxHealth;
+    }
+
+    private void AddArmourActivated(object sender, EventArgs e)
+    {
+        Game.Player.Character.Armor = 100;
     }
 
     private void Ticker_WantedLevelUpdate(object sender, EventArgs e)
