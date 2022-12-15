@@ -25,6 +25,8 @@ internal class PlayerMenu : ISubMenu
     private readonly NativeItem _healPlayer = new("~b~Replenish Health");
     private readonly NativeItem _addArmour = new("~b~Replenish Armour");
 
+    private int lastMax;
+
     public NativeMenu Create()
     {
         _wantedLevel.SelectedItem = Game.Player.WantedLevel;
@@ -129,6 +131,16 @@ internal class PlayerMenu : ISubMenu
     private void NeverWantedChanged(object sender, EventArgs e)
     {
         var c = _neverWanted.Checked;
+
+        // Workaround for max wanted level stuck at 0
+        if (c)
+        {
+            lastMax = Game.MaxWantedLevel;
+        }
+        else
+        {
+            Game.MaxWantedLevel = lastMax;
+        }
 
         _maxWantedLevel.Enabled = !c;
         _lockMaxWantedLevel.Enabled = !c;
