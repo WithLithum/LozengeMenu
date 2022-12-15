@@ -1,10 +1,12 @@
 ﻿namespace LozengeMenu;
 
 using GTA;
+using GTA.UI;
 using LozengeMenu.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,6 +50,7 @@ public class Main : Script
             _ok = true;
 
             _ticker = InstantiateScript<Ticker>();
+            Notification.Show($"~g~Lozenge Menu ~b~{Assembly.GetExecutingAssembly().GetName().Version} ~s~ready.");
         }
 
         _controller.Process();

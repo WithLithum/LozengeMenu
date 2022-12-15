@@ -17,7 +17,8 @@ internal class MenuController
     private readonly ISubMenu[] _subs =
     {
         new PlayerMenu(),
-        new TimeMenu()
+        new TimeMenu(),
+        new MiscMenu()
     };
 
     internal void Operate(ISubMenu menu)
