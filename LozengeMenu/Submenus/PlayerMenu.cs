@@ -22,6 +22,8 @@ internal class PlayerMenu : ISubMenu
         _maxWantedLevel.ItemChanged += MaxWantedLevelChanged;
 
         _menu.Add(_invincible);
+        _menu.Add(_neverWanted);
+        _menu.Add(_maxWantedLevel);
 
         return _menu;
     }
