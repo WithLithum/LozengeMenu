@@ -2,6 +2,7 @@
 
 using LemonUI;
 using LemonUI.Menus;
+using LozengeMenu.Core.Worlds;
 using LozengeMenu.Submenus;
 using System;
 using System.Collections.Generic;
@@ -52,5 +53,7 @@ internal class MenuController
         {
             Operate(sub);
         }
+
+        VehicleEditor.Init(_pool);
     }
 }

@@ -8,5 +8,10 @@ using System.Windows.Forms;
 
 public struct ConfigFile
 {
-    public Keys OpenMenuKey { get; set; }
+    public ConfigFile()
+    {
+        // C# compiler says this need to be here
+    }
+
+    public Keys OpenMenuKey { get; set; } = Keys.F7;
 }

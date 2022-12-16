@@ -42,6 +42,7 @@ internal static class ConfigManager
         if (!File.Exists(_configFilePath))
         {
             ConfigFile = new();
+            SaveConfig();
             return;
         }
 

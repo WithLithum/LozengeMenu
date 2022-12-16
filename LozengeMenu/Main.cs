@@ -31,6 +31,7 @@ public class Main : Script
     private void ConfigManager_ConfigReload(object sender, ConfigManager.ConfigEventArgs e)
     {
         _openMenuKey = e.Config.OpenMenuKey;
+        Notification.Show($"Press {_openMenuKey} to open menu.");
     }
 
     private void Main_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
