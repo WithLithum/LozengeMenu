@@ -111,11 +111,28 @@ public class Ticker : Script
     }
     #endregion
 
+    #region Vehicle Options
+    private bool _wasInVehicle;
+
+    public static event EventHandler<bool> InVehicleStatusUpdate;
+
+    private void ProcessVehicle(Ped player)
+    {
+        var inVehicle = Natives.IsPedInAnyVehicle(player.Handle, false);
+        if (inVehicle != _wasInVehicle)
+        {
+            _wasInVehicle = inVehicle;
+            InVehicleStatusUpdate?.Invoke(null, inVehicle);
+        }
+    }
+    #endregion
+
     private void Ticker_Tick(object sender, EventArgs e)
     {
         var player = Game.Player.Character;
 
         ProcessPlayer(player);
         ProcessTime();
+        ProcessVehicle(player);
     }
 }
