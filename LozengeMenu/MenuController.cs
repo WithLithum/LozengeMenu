@@ -17,6 +17,7 @@ internal class MenuController
     private readonly ISubMenu[] _subs =
     {
         new PlayerMenu(),
+        new VehicleMenu(),
         new TimeMenu(),
         new MiscMenu()
     };

@@ -35,7 +35,6 @@ public class Main : Script
 
     private void Main_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
     {
-        // TODO configurable menu key
         if (_ok && e.KeyCode == _openMenuKey)
         {
             _controller.OpenMenu();
