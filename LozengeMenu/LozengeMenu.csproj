@@ -4,6 +4,16 @@
     <TargetFramework>net48</TargetFramework>
     <LangVersion>latest</LangVersion>
     <PlatformTarget>x64</PlatformTarget>
+    <Platforms>AnyCPU;x64</Platforms>
+    <Title>LozengeMenu</Title>
+    <Authors>WithLithum</Authors>
+    <Description>Yet another singleplayer trainer/mod menu for GTA V</Description>
+    <Copyright>(C) WithLithum 2022.</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    
+    <!-- Version -->
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionSuffix>alpha</VersionSuffix>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,5 +40,16 @@
   <ItemGroup>
     <Folder Include="Core\Logging\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="mkdir $(OutDir)\scripts&#xD;&#xA;copy $(OutDir)\LemonUI.SHVDN3.dll $(OutDir)\scripts\LemonUI.SHVDN3.dll&#xD;&#xA;copy $(OutDir)\LozengeMenu.* $(OutDir)\scripts\&#xD;&#xA;copy $(OutDir)\NativeFx.Interop.dll $(OutDir)\scripts\" />
+  </Target>
 
 </Project>
