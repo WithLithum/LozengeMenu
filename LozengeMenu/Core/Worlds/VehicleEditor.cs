@@ -88,6 +88,8 @@ public static class VehicleEditor
         }
 
         _menu.Parent = parent;
+        parent.Visible = false;
+        _menu.Visible = true;
     }
 
     public static void Populate(Vehicle vehicle)
