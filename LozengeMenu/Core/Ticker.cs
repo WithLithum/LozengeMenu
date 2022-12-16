@@ -1,6 +1,7 @@
 ﻿namespace LozengeMenu.Core;
 
 using GTA;
+using LozengeMenu.Core.Worlds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -124,6 +125,8 @@ public class Ticker : Script
             _wasInVehicle = inVehicle;
             InVehicleStatusUpdate?.Invoke(null, inVehicle);
         }
+
+        VehicleEditor.Update();
     }
     #endregion
 
