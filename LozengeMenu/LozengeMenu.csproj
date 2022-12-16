@@ -7,13 +7,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include=".lozenge\README.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Costura.Fody" Version="5.7.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="LemonUI.SHVDN3" Version="1.9.1" />
     <PackageReference Include="NativeFx.Interop" Version="0.1.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="ScriptHookVDotNet3" Version="3.5.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Core\Logging\" />
   </ItemGroup>
 
 </Project>
