@@ -22,6 +22,7 @@ public static class VehicleEditor
     private static readonly NativeItem _itemWash = new("~r~Clean Vehicle");
     private static readonly LozengeListItem<int> _itemLivery = new("Livery");
     private static readonly NativeItem _itemNumberPlate = new("Number Plate");
+    private static readonly LozengeCheckboxItem _itemXeonLights = new("Xenon Lights");
     private static readonly LozengeCheckboxItem _itemEngine = new("~g~Engine Active");
     private static readonly LozengeCheckboxItem _itemSiren = new("~y~Siren Active");
     private static readonly NativeCheckboxItem _itemSirenSilent = new("~y~Siren Play Sounds");
@@ -33,10 +34,21 @@ public static class VehicleEditor
         _itemWash.Activated += WashActivated;
         _itemSirenSilent.CheckboxChanged += SirenSilentChanged;
         _itemNumberPlate.Activated += NumberPlateActivated;
+        _itemXeonLights.CheckboxChanged += XeonLightsChanged;
         _itemLivery.ItemChanged += LiveryChanged;
         _itemEngine.CheckboxChanged += EngineChanged;
         _menu.Closed += MenuClosed;
         _menu.Opening += MenuOpening;
+    }
+
+    private static void XeonLightsChanged(object sender, EventArgs e)
+    {
+        if (_current?.Exists() != true)
+        {
+            return;
+        }
+
+        Natives.ToggleVehicleMod(_current.Handle, 22, _itemXeonLights.Checked);
     }
 
     private static void EngineChanged(object sender, EventArgs e)
@@ -155,6 +167,7 @@ public static class VehicleEditor
 
         _itemEngine.SetCheckedSilent(_current.IsEngineRunning);
         _itemSiren.SetCheckedSilent(_current.IsSirenActive);
+        _itemXeonLights.SetCheckedSilent(Natives.IsToggleModOn(_current.Handle, 22));
 
         if (_updateLiveries)
         {
@@ -192,6 +205,7 @@ public static class VehicleEditor
         CheckLivery(vehicle);
 
         _menu.Add(_itemNumberPlate);
+        _menu.Add(_itemXeonLights);
         _menu.Add(_itemEngine);
 
         CheckSirenItems(vehicle);
