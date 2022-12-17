@@ -5,6 +5,7 @@
 namespace LozengeMenu.Core.Worlds;
 
 using GTA;
+using GTA.Math;
 
 internal static class EntitySpawner
 {
@@ -42,6 +43,30 @@ internal static class EntitySpawner
         if (!model.IsValid || !model.IsVehicle) return;
         var p = Game.Player.Character;
 
-        World.CreateVehicle(model, p.FrontPosition, p.Heading);
+        Vector3 pos;
+
+        if (Natives.IsPedInAnyVehicle(p.Handle, false))
+        {
+            var current = p.CurrentVehicle;
+
+            if (current?.Exists() == true)
+            {
+                pos = current.FrontPosition;
+            }
+            else
+            {
+                pos = p.FrontPosition;
+            }
+        }
+        else
+        {
+            pos = p.FrontPosition;
+        }
+
+        var vehicle = World.CreateVehicle(model, pos, p.Heading);
+        if (vehicle?.Exists() == true)
+        {
+            p.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
+        }
     }
 }
