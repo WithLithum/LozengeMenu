@@ -30,8 +30,25 @@ public static class VehicleEditor
         _itemRepair.Activated += RepairActivated;
         _itemWash.Activated += WashActivated;
         _itemSirenSilent.CheckboxChanged += SirenSilentChanged;
+        _itemNumberPlate.Activated += NumberPlateActivated;
         _menu.Closed += MenuClosed;
         _menu.Opening += MenuOpening;
+    }
+
+    private static void NumberPlateActivated(object sender, EventArgs e)
+    {
+        if (_current?.Exists() != true)
+        {
+            return;
+        }
+
+        if (!Util.TryAskQuestion(WindowTitle.EnterMessage20, 8, null, out var plate))
+        {
+            return;
+        }
+
+        Natives.SetVehicleNumberPlateText(_current.Handle, plate);
+        _itemNumberPlate.AltTitle = Natives.GetVehicleNumberPlateText(_current.Handle);
     }
 
     private static void MenuOpening(object sender, System.ComponentModel.CancelEventArgs e)
@@ -139,6 +156,7 @@ public static class VehicleEditor
 
         _menu.Add(_itemRepair);
         _menu.Add(_itemWash);
+        _menu.Add(_itemNumberPlate);
         _menu.Add(_itemEngine);
 
         CheckSirenItems(vehicle);
