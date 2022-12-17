@@ -12,6 +12,8 @@ using System;
 public class Ticker : Script
 {
     #region Player Options
+    private static bool _modifyWanted;
+
     public static bool Invincible { get; set; }
 
     public static bool NeverWanted { get; set; }
@@ -34,7 +36,14 @@ public class Ticker : Script
         }
     }
 
-    private void ProcessPlayer(Ped player)
+    public static void UpdateWanted(int level)
+    {
+        Game.Player.WantedLevel = level;
+        WantedLevel = level;
+        _modifyWanted = true;
+    }
+
+    private static void ProcessPlayer(Ped player)
     {
         LastPlayer = player.Handle;
 
@@ -58,7 +67,22 @@ public class Ticker : Script
             {
                 if (WantedLevel != Game.Player.WantedLevel)
                 {
-                    WantedLevel = Game.Player.WantedLevel;
+                    // Check if wanted level wants to be modified
+                    // If so, we set actual wanted level to Ticker Wanted Level
+                    // otherwise, set Ticker wanted level to actual wanted level
+
+                    // (try to fix that screwy wanted level stuck at 0 bug)
+                    if (_modifyWanted)
+                    {
+                        // Set wanted level, then reset flag
+                        Game.Player.WantedLevel = WantedLevel;
+                        _modifyWanted = false;
+                    }
+                    else
+                    {
+                        WantedLevel = Game.Player.WantedLevel;
+                    }
+
                     WantedLevelUpdate?.Invoke(null, EventArgs.Empty);
                 }
             }

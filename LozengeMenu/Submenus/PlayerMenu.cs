@@ -99,7 +99,10 @@ internal class PlayerMenu : ISubMenu
 
     private void Ticker_WantedLevelUpdate(object sender, EventArgs e)
     {
-        _wantedLevel.SelectItemSilent(Ticker.WantedLevel);
+        if (_wantedLevel.SelectedItem != Ticker.WantedLevel)
+        {
+            _wantedLevel.SelectItemSilent(Ticker.WantedLevel);
+        }
     }
 
     private void LockWantedLevelChanged(object sender, EventArgs e)
@@ -111,6 +114,7 @@ internal class PlayerMenu : ISubMenu
     {
         Game.Player.WantedLevel = _wantedLevel.SelectedItem;
         Ticker.WantedLevel = _wantedLevel.SelectedItem;
+        Ticker.UpdateWanted(_wantedLevel.SelectedItem);
     }
 
     private void LockMaxWantedLevelChanged(object sender, EventArgs e)
