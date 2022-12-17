@@ -114,6 +114,7 @@ public class Ticker : Script
 
     #region Vehicle Options
     private bool _wasInVehicle;
+    private int _editorCounter;
 
     public static event EventHandler<bool> InVehicleStatusUpdate;
 
@@ -136,6 +137,15 @@ public class Ticker : Script
 
         ProcessPlayer(player);
         ProcessTime();
-        ProcessVehicle(player);
+
+        if (_editorCounter < 10)
+        {
+            _editorCounter++;
+        }
+        else
+        {
+            _editorCounter = 0;
+            ProcessVehicle(player);
+        }
     }
 }
