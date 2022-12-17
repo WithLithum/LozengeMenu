@@ -1,14 +1,13 @@
-﻿namespace LozengeMenu;
+﻿// Copyright (C) WithLithum 2022.
+// Licensed under GNU General Public License, either version 3 or any later
+// version of your choice.
+
+namespace LozengeMenu;
 
 using LemonUI;
 using LemonUI.Menus;
 using LozengeMenu.Core.Worlds;
 using LozengeMenu.Submenus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 internal class MenuController
 {

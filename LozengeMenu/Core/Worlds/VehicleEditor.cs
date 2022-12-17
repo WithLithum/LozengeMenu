@@ -1,15 +1,14 @@
-﻿namespace LozengeMenu.Core.Worlds;
+﻿// Copyright (C) WithLithum 2022.
+// Licensed under GNU General Public License, either version 3 or any later
+// version of your choice.
+
+namespace LozengeMenu.Core.Worlds;
 
 using GTA;
 using LemonUI;
 using LemonUI.Menus;
 using LozengeMenu.Core.UI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 public static class VehicleEditor
 {

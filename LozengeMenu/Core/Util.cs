@@ -1,14 +1,13 @@
-﻿namespace LozengeMenu.Core;
+﻿// Copyright (C) WithLithum 2022.
+// Licensed under GNU General Public License, either version 3 or any later
+// version of your choice.
+
+namespace LozengeMenu.Core;
 
 using GTA;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
 
 internal static class Util
 {
