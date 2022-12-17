@@ -19,6 +19,7 @@ public static class VehicleEditor
 
     private static readonly NativeItem _itemRepair = new("~r~Repair Vehicle");
     private static readonly NativeItem _itemWash = new("~r~Clean Vehicle");
+    private static readonly LozengeListItem<int> _itemLivery = new("Livery");
     private static readonly NativeItem _itemNumberPlate = new("Number Plate");
     private static readonly LozengeCheckboxItem _itemEngine = new("~g~Engine Active");
     private static readonly LozengeCheckboxItem _itemSiren = new("~y~Siren Active");
@@ -31,8 +32,19 @@ public static class VehicleEditor
         _itemWash.Activated += WashActivated;
         _itemSirenSilent.CheckboxChanged += SirenSilentChanged;
         _itemNumberPlate.Activated += NumberPlateActivated;
+        _itemLivery.ItemChanged += LiveryChanged;
         _menu.Closed += MenuClosed;
         _menu.Opening += MenuOpening;
+    }
+
+    private static void LiveryChanged(object sender, LozengeItemEventArgs<int> e)
+    {
+        if (_current?.Exists() != true)
+        {
+            return;
+        }
+
+        Natives.SetVehicleLivery(_current.Handle, e.Object);
     }
 
     private static void NumberPlateActivated(object sender, EventArgs e)
@@ -156,6 +168,9 @@ public static class VehicleEditor
 
         _menu.Add(_itemRepair);
         _menu.Add(_itemWash);
+
+        CheckLivery(vehicle);
+
         _menu.Add(_itemNumberPlate);
         _menu.Add(_itemEngine);
 
@@ -168,6 +183,41 @@ public static class VehicleEditor
 
         _menu.Add(_itemSiren);
         _menu.Add(_itemSirenSilent);
+    }
+
+    public static void CheckLivery(Vehicle vehicle)
+    {
+        if (vehicle?.Exists() != true)
+        {
+            return;
+        }
+
+        // Get liveries count
+        var count = Natives.GetVehicleLiveryCount(vehicle.Handle);
+
+        if (count <= 0)
+        {
+            // No liveries available, or liveries configured but not added into textures
+            return;
+        }
+
+        _itemLivery.Clear();
+        _menu.Add(_itemLivery);
+
+        if (count == 1)
+        {
+            // Only one livery available, tell user that
+            _itemLivery.Enabled = false;
+            _itemLivery.Add(1);
+            return;
+        }
+
+        for (var i = 1; i < count; i++)
+        {
+            // Add all liveries
+            _itemLivery.Enabled = true;
+            _itemLivery.Add(i);
+        }
     }
 
     internal static void Init(ObjectPool pool)
