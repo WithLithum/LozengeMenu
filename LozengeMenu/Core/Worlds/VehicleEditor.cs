@@ -34,8 +34,19 @@ public static class VehicleEditor
         _itemSirenSilent.CheckboxChanged += SirenSilentChanged;
         _itemNumberPlate.Activated += NumberPlateActivated;
         _itemLivery.ItemChanged += LiveryChanged;
+        _itemEngine.CheckboxChanged += EngineChanged;
         _menu.Closed += MenuClosed;
         _menu.Opening += MenuOpening;
+    }
+
+    private static void EngineChanged(object sender, EventArgs e)
+    {
+        if (_current?.Exists() != true)
+        {
+            return;
+        }
+
+        _current.IsEngineRunning = _itemEngine.Checked;
     }
 
     private static void LiveryChanged(object sender, LozengeItemEventArgs<int> e)
