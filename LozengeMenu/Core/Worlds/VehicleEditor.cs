@@ -219,11 +219,12 @@ public static class VehicleEditor
             // Only one livery available, tell user that
             _itemLivery.Enabled = false;
             _updateLiveries = false;
-            _itemLivery.Add(1);
+            // The behaviour, as least on 2265.16 is liveries are zero-based
+            _itemLivery.Add(0);
             return;
         }
 
-        for (var i = 1; i < count; i++)
+        for (var i = 0; i < count; i++)
         {
             // Add all liveries
             _itemLivery.Enabled = true;
