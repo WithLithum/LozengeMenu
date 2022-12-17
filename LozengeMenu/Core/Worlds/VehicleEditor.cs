@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 
 public static class VehicleEditor
 {
+    private static bool _updateLiveries;
+
     #region Primitive UI
     private static readonly NativeMenu _menu = new("Lozenge", "Vehicle Editor");
     private static Vehicle _current;
@@ -131,6 +133,9 @@ public static class VehicleEditor
     }
     #endregion
 
+    /// <summary>
+    /// Called each 10 tick to update this menu.
+    /// </summary>
     public static void Update()
     {
         if (!_menu.Visible || _current?.Exists() != true)
@@ -140,6 +145,11 @@ public static class VehicleEditor
 
         _itemEngine.SetCheckedSilent(_current.IsEngineRunning);
         _itemSiren.SetCheckedSilent(_current.IsSirenActive);
+
+        if (_updateLiveries)
+        {
+            _itemLivery.SelectItemSilent(Natives.GetVehicleLivery(_current.Handle));
+        }
     }
 
     public static void Show(NativeMenu parent, Vehicle vehicle)
@@ -198,6 +208,7 @@ public static class VehicleEditor
         if (count <= 0)
         {
             // No liveries available, or liveries configured but not added into textures
+            _updateLiveries = false;
             return;
         }
 
@@ -208,6 +219,7 @@ public static class VehicleEditor
         {
             // Only one livery available, tell user that
             _itemLivery.Enabled = false;
+            _updateLiveries = false;
             _itemLivery.Add(1);
             return;
         }
@@ -216,6 +228,7 @@ public static class VehicleEditor
         {
             // Add all liveries
             _itemLivery.Enabled = true;
+            _updateLiveries = true;
             _itemLivery.Add(i);
         }
     }
