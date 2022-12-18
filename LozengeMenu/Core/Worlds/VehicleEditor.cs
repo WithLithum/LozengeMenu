@@ -5,6 +5,7 @@
 namespace LozengeMenu.Core.Worlds;
 
 using GTA;
+using GTA.UI;
 using LemonUI;
 using LemonUI.Menus;
 using LozengeMenu.Core.UI;
@@ -155,6 +156,35 @@ public static class VehicleEditor
     }
     #endregion
 
+    private static void UpdateLivery()
+    {
+        if (!_updateLiveries)
+        {
+            return;
+        }
+
+        var livery = Natives.GetVehicleLivery(_current.Handle);
+
+        try
+        {
+            if (livery != -1)
+            {
+                _itemLivery.SelectItemSilent(livery);
+            }
+        }
+        catch (Exception ex)
+        {
+#if DEBUG
+            if (ex is ArgumentOutOfRangeException || ex is IndexOutOfRangeException)
+            {
+                Notification.Show(ex.Message);
+                Notification.Show(livery.ToString());
+            }
+#endif
+            // Stop script from crashing
+        }
+    }
+
     /// <summary>
     /// Called each 10 tick to update this menu.
     /// </summary>
@@ -169,10 +199,7 @@ public static class VehicleEditor
         _itemSiren.SetCheckedSilent(_current.IsSirenActive);
         _itemXeonLights.SetCheckedSilent(Natives.IsToggleModOn(_current.Handle, 22));
 
-        if (_updateLiveries)
-        {
-            _itemLivery.SelectItemSilent(Natives.GetVehicleLivery(_current.Handle));
-        }
+        UpdateLivery();
     }
 
     public static void Show(NativeMenu parent, Vehicle vehicle)
@@ -236,26 +263,43 @@ public static class VehicleEditor
             return;
         }
 
-        _itemLivery.Clear();
-        _menu.Add(_itemLivery);
-
-        if (count == 1)
+        // The fix for "argument out of range" issue
+        if (_itemLivery.Items.Count > 0)
         {
-            // Only one livery available, tell user that
-            _itemLivery.Enabled = false;
-            _updateLiveries = false;
-            // The behaviour, as least on 2265.16 is liveries are zero-based
-            _itemLivery.Add(0);
+            _itemLivery.SelectIndexSilent(0);
+        }
+
+        _itemLivery.Clear();
+
+        try
+        {
+            if (count == 1)
+            {
+                // Only one livery available, tell user that
+                _itemLivery.Enabled = false;
+                _updateLiveries = false;
+                // The behaviour, as least on 2265.16 is liveries are zero-based
+                _itemLivery.Add(0);
+                return;
+            }
+
+            for (var i = 0; i < count; i++)
+            {
+                // Add all liveries
+                _itemLivery.Enabled = true;
+                _updateLiveries = true;
+                _itemLivery.Add(i);
+            }
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+#if DEBUG
+            Notification.Show($"AooR issue caught: ~n~Liveries: {count}~n~Current Count: {_itemLivery.Items.Count}");
+#endif
             return;
         }
 
-        for (var i = 0; i < count; i++)
-        {
-            // Add all liveries
-            _itemLivery.Enabled = true;
-            _updateLiveries = true;
-            _itemLivery.Add(i);
-        }
+        _menu.Add(_itemLivery);
     }
 
     internal static void Init(ObjectPool pool)
